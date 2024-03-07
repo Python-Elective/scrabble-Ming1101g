@@ -73,7 +73,47 @@ def get_word_score(word, n):
     """
     # TO DO ... <-- Remove this comment when you code this function
 
-
+[Tuesday 21:31] Tarit (Tarit) Arjanurak
+   assert isinstance(word,str), "word must be a string"
+    word = word.lower()
+    assert word.islower(), "lower() conversion failed"
+    assert len(word) > 0, "word must not be empty"
+    assert isinstance(n, int), "n must be an int"
+    assert n > 0, "hand length n must not be 0"
+ 
+    # magic coding
+    word_score = 1
+ 
+    # Pseudocode
+    """
+    for each letter in word
+        get letter score from dict SCRABBLE_LETTER_VALUES
+        add up all the letter scores
+    
+    multiply by length of word
+    followed by bonus calculation
+    example if n=7 and you make the word "waybill" on the first try.
+    it would be worth 155 points (the base score for "waybill" is (4++))
+    """
+    total_letter_score = 0
+ 
+    for letter in word:
+        letter_score = SCRABBLE_LETTER_VALUES[letter]
+        total_letter_score += letter_score
+    
+    total_letter_score *= n
+ 
+    if len(word) == n:
+        total_letter_score += 50
+ 
+    print(total_letter_score)
+ 
+ 
+    # checking post-conditions
+    assert word_score > 0, "score calculation failed"
+    assert isinstance(word_score, int), "score must be int"
+ 
+    return word_score
 #
 # Problem #2: Make sure you understand how this function works and what it does!
 #
