@@ -72,9 +72,7 @@ def get_word_score(word, n):
     returns: int >= 0
     """
     # TO DO ... <-- Remove this comment when you code this function
-
-[Tuesday 21:31] Tarit (Tarit) Arjanurak
-   assert isinstance(word,str), "word must be a string"
+    assert isinstance(word,str), "word must be a string"
     word = word.lower()
     assert word.islower(), "lower() conversion failed"
     assert len(word) > 0, "word must not be empty"
@@ -86,17 +84,17 @@ def get_word_score(word, n):
  
     # Pseudocode
     """
-    for each letter in word
-        get letter score from dict SCRABBLE_LETTER_VALUES
-        add up all the letter scores
-    
-    multiply by length of word
-    followed by bonus calculation
-    example if n=7 and you make the word "waybill" on the first try.
-    it would be worth 155 points (the base score for "waybill" is (4++))
+    Calculate the score for a word in Scrabble by iterating through each letter:
+    - Retrieve the letter score from the SCRABBLE_LETTER_VALUES dictionary.
+    - Sum up all the letter scores.
+
+    Multiply the total score by the length of the word,
+    and then apply the bonus calculation. 
+    For instance, if you use all seven letters and form a word like "waybill" on the initial attempt,
+    the total score would be 155 points (base score for "waybill" multiplied by the length and any applicable bonus).
+
     """
     total_letter_score = 0
- 
     for letter in word:
         letter_score = SCRABBLE_LETTER_VALUES[letter]
         total_letter_score += letter_score
@@ -114,7 +112,12 @@ def get_word_score(word, n):
     assert isinstance(word_score, int), "score must be int"
  
     return word_score
-#
+
+
+
+get_word_score("waybill",7)
+
+#, 
 # Problem #2: Make sure you understand how this function works and what it does!
 #
 def display_hand(hand):
