@@ -1,5 +1,5 @@
 import random
-import string
+import string 
 
 VOWELS = 'aeiou'
 CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
@@ -64,60 +64,57 @@ def get_word_score(word, n):
     word, multiplied by the length of the word, PLUS 50 points if all n
     letters are used on the first turn.
 
+    # Pseudocode
+    for each letter in word
+        get letter score from dict SCRABBLE_LETTER_VALUES
+        add up all the letter cases
+
+    multiply by length of word  
+    followed by bonus calculation
+    example, if n=7 and you make the word 'waybill' on the first try,
+    it would be worth 155 points (The base score for 'waybill' is (4+1+4+3+1+1+1)*7=105, plus an additional 50-point bonus for using all n letters)
+
     Letters are scored as in Scrabble; A is worth 1, B is worth 3, C is
     worth 3, D is worth 2, E is worth 1, and so on (see SCRABBLE_LETTER_VALUES)
 
     word: string (lowercase letters)
     n: integer (HAND_SIZE; i.e., hand size required for additional points)
-    returns: int >= 0
+    returns: int >= 0I
+    hand: dictionary (string -> int)    
+    returns: dictionary (string -> int)
     """
     # TO DO ... <-- Remove this comment when you code this function
-    assert isinstance(word,str), "word must be a string"
+
+    assert isinstance(word, str), "word must be a string"
     word = word.lower()
-    assert word.islower(), "lower() conversion failed"
-    assert len(word) > 0, "word must not be empty"
+    #assert word.islower(), "lower() conversion failed"
+    assert len(word) >= 0, "word must not be empty"
     assert isinstance(n, int), "n must be an int"
-    assert n > 0, "hand length n must not be 0"
- 
-    # magic coding
-    word_score = 1
- 
-    # Pseudocode
-    """
-    Calculate the score for a word in Scrabble by iterating through each letter:
-    - Retrieve the letter score from the SCRABBLE_LETTER_VALUES dictionary.
-    - Sum up all the letter scores.
+    assert n >= 0, "hand length n must not be 0"
 
-    Multiply the total score by the length of the word,
-    and then apply the bonus calculation. 
-    For instance, if you use all seven letters and form a word like "waybill" on the initial attempt,
-    the total score would be 155 points (base score for "waybill" multiplied by the length and any applicable bonus).
-
-    """
-    total_letter_score = 0
-    for letter in word:
-        letter_score = SCRABBLE_LETTER_VALUES[letter]
-        total_letter_score += letter_score
     
-    total_letter_score *= n
- 
+    base_score = 0
+    for letter in word:
+        base_score += SCRABBLE_LETTER_VALUES[letter.lower()]
+    total_score = base_score * len(word)
+
     if len(word) == n:
-        total_letter_score += 50
- 
-    print(total_letter_score)
- 
- 
-    # checking post-conditions
-    assert word_score > 0, "score calculation failed"
-    assert isinstance(word_score, int), "score must be int"
- 
-    return word_score
+        total_score += 50
 
+    #checking post-conditions
+    assert total_score >= 0, "score calculation failed"
 
+    return total_score
 
-get_word_score("waybill",7)
+#testcases
+#legald
+print(get_word_score('Waybill', 7))
+#illegal
+# get_word_score(1000, 7)
+# get_word_score("", 7)
+# get_word_score("blabla", 0)
 
-#, 
+#
 # Problem #2: Make sure you understand how this function works and what it does!
 #
 def display_hand(hand):
@@ -134,7 +131,7 @@ def display_hand(hand):
     """
     for letter in hand.keys():
         for j in range(hand[letter]):
-            print(letter, end=" ")       # print all on the same line
+            print(letter, end = " ")       # print all on the same line
     print()                             # print an empty line
 
 #
@@ -188,8 +185,29 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
-    # TO DO ... <-- Remove this comment when you code this function
 
+
+    """"
+    make a hand.copy()
+    for every letter in word
+        use the letter as a key to look up in the hand dict
+        and subtract one from the dict values letter counts
+        what to do if letter count is 0 ?
+    return handcopy
+
+    """
+
+    assert len(word) >= 0, "word must not be empty"
+    assert isinstance(word, str), "word must be a string"
+
+    hand_copy = hand.copy()
+    
+    for letter in word:
+        hand_copy[letter] -= 1
+
+        if hand_copy[letter] == 0:
+            del hand_copy[letter]
+    return hand_copy
 
 #
 # Problem #3: Test word validity
@@ -206,6 +224,39 @@ def is_valid_word(word, hand, word_list):
     word_list: list of lowercase strings
     """
     # TO DO ... <-- Remove this comment when you code this function
+
+    # check pre-condition
+
+    # for each letter in word
+    #     if letter in hand
+    #         find the .count of letter in word
+    #         and make sure that count is also in your hand(letter) 
+    #     else
+    #         find the .count of letter in word
+    #         and make sure that count is also in your hand
+    
+    # if word not in word_list
+    #     return False
+    # #all checks passed
+    # return True
+
+    # # check post-condition
+    # Does not mutate hand or word_list
+    
+    assert word != '', "word mustn't be empty"
+
+    word = word.lower()
+    for letter in word:
+        if letter in hand:
+            if word.count(letter) > hand.get(letter):
+                return False
+        else:
+            return False
+
+    if word not in word_list:
+        return False
+    else:
+        return True
 
 
 #
