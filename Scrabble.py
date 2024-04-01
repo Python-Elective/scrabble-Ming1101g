@@ -83,11 +83,9 @@ def get_word_score(word, n):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
-    # TO DO ... <-- Remove this comment when you code this function
 
     assert isinstance(word, str), "word must be a string"
     word = word.lower()
-    #assert word.islower(), "lower() conversion failed"
     assert len(word) >= 0, "word must not be empty"
     assert isinstance(n, int), "n must be an int"
     assert n >= 0, "hand length n must not be 0"
@@ -223,26 +221,7 @@ def is_valid_word(word, hand, word_list):
     hand: dictionary (string -> int)
     word_list: list of lowercase strings
     """
-    # TO DO ... <-- Remove this comment when you code this function
 
-    # check pre-condition
-
-    # for each letter in word
-    #     if letter in hand
-    #         find the .count of letter in word
-    #         and make sure that count is also in your hand(letter) 
-    #     else
-    #         find the .count of letter in word
-    #         and make sure that count is also in your hand
-    
-    # if word not in word_list
-    #     return False
-    # #all checks passed
-    # return True
-
-    # # check post-condition
-    # Does not mutate hand or word_list
-    
     assert word != '', "word mustn't be empty"
 
     word = word.lower()
@@ -270,7 +249,12 @@ def calculate_hand_len(hand):
     hand: dictionary (string-> int)
     returns: integer
     """
-    # TO DO... <-- Remove this comment when you code this function
+    assert isinstance(hand, dict), "Hand must be a dictionary"
+    for value in hand.values():
+        assert isinstance(value, int), "Values in hand dictionary must be integers"
+        assert value >= 0, "Values in hand dictionary cannot be negative"
+    
+    return sum(hand.values())
 
 
 def play_hand(hand, word_list, n):
