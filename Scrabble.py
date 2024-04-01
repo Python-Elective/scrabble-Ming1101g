@@ -1,5 +1,5 @@
 import random
-import string
+import string 
 
 VOWELS = 'aeiou'
 CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
@@ -64,15 +64,53 @@ def get_word_score(word, n):
     word, multiplied by the length of the word, PLUS 50 points if all n
     letters are used on the first turn.
 
+    # Pseudocode
+    for each letter in word
+        get letter score from dict SCRABBLE_LETTER_VALUES
+        add up all the letter cases
+
+    multiply by length of word  
+    followed by bonus calculation
+    example, if n=7 and you make the word 'waybill' on the first try,
+    it would be worth 155 points (The base score for 'waybill' is (4+1+4+3+1+1+1)*7=105, plus an additional 50-point bonus for using all n letters)
+
     Letters are scored as in Scrabble; A is worth 1, B is worth 3, C is
     worth 3, D is worth 2, E is worth 1, and so on (see SCRABBLE_LETTER_VALUES)
 
     word: string (lowercase letters)
     n: integer (HAND_SIZE; i.e., hand size required for additional points)
-    returns: int >= 0
+    returns: int >= 0I
+    hand: dictionary (string -> int)    
+    returns: dictionary (string -> int)
     """
-    # TO DO ... <-- Remove this comment when you code this function
 
+    assert isinstance(word, str), "word must be a string"
+    word = word.lower()
+    assert len(word) >= 0, "word must not be empty"
+    assert isinstance(n, int), "n must be an int"
+    assert n >= 0, "hand length n must not be 0"
+
+    
+    base_score = 0
+    for letter in word:
+        base_score += SCRABBLE_LETTER_VALUES[letter.lower()]
+    total_score = base_score * len(word)
+
+    if len(word) == n:
+        total_score += 50
+
+    #checking post-conditions
+    assert total_score >= 0, "score calculation failed"
+
+    return total_score
+
+#testcases
+#legald
+print(get_word_score('Waybill', 7))
+#illegal
+# get_word_score(1000, 7)
+# get_word_score("", 7)
+# get_word_score("blabla", 0)
 
 #
 # Problem #2: Make sure you understand how this function works and what it does!
@@ -91,7 +129,7 @@ def display_hand(hand):
     """
     for letter in hand.keys():
         for j in range(hand[letter]):
-            print(letter, end=" ")       # print all on the same line
+            print(letter, end = " ")       # print all on the same line
     print()                             # print an empty line
 
 #
@@ -145,8 +183,29 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
-    # TO DO ... <-- Remove this comment when you code this function
 
+
+    """"
+    make a hand.copy()
+    for every letter in word
+        use the letter as a key to look up in the hand dict
+        and subtract one from the dict values letter counts
+        what to do if letter count is 0 ?
+    return handcopy
+
+    """
+
+    assert len(word) >= 0, "word must not be empty"
+    assert isinstance(word, str), "word must be a string"
+
+    hand_copy = hand.copy()
+    
+    for letter in word:
+        hand_copy[letter] -= 1
+
+        if hand_copy[letter] == 0:
+            del hand_copy[letter]
+    return hand_copy
 
 #
 # Problem #3: Test word validity
@@ -162,7 +221,21 @@ def is_valid_word(word, hand, word_list):
     hand: dictionary (string -> int)
     word_list: list of lowercase strings
     """
-    # TO DO ... <-- Remove this comment when you code this function
+
+    assert word != '', "word mustn't be empty"
+
+    word = word.lower()
+    for letter in word:
+        if letter in hand:
+            if word.count(letter) > hand.get(letter):
+                return False
+        else:
+            return False
+
+    if word not in word_list:
+        return False
+    else:
+        return True
 
 
 #
@@ -176,7 +249,12 @@ def calculate_hand_len(hand):
     hand: dictionary (string-> int)
     returns: integer
     """
-    # TO DO... <-- Remove this comment when you code this function
+    assert isinstance(hand, dict), "Hand must be a dictionary"
+    for value in hand.values():
+        assert isinstance(value, int), "Values in hand dictionary must be integers"
+        assert value >= 0, "Values in hand dictionary cannot be negative"
+    
+    return sum(hand.values())
 
 
 def play_hand(hand, word_list, n):
